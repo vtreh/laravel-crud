@@ -1,10 +1,6 @@
 <?php
 
-use App\Models\Listing;
+use App\Http\Controllers\ListingController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/listings', function () {
-    $listings = Listing::with('employer')->paginate(5);
-
-    return view('listings', compact('listings'));
-});
+Route::resource('/listings', ListingController::class);
