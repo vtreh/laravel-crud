@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreListingRequest;
 use App\Models\Listing;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Throwable;
 
 class ListingController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $listings = Listing::with('employer')
             ->latest()
@@ -18,22 +19,22 @@ class ListingController extends Controller
         return view('listings.index', compact('listings'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('listings.create');
     }
 
-    public function show(Listing $listing)
+    public function show(Listing $listing): View
     {
         return view('listings.show', compact('listing'));
     }
 
-    public function edit(Listing $listing)
+    public function edit(Listing $listing): View
     {
         return view('listings.edit', compact('listing'));
     }
 
-    public function store(StoreListingRequest $request)
+    public function store(StoreListingRequest $request): RedirectResponse
     {
         try {
             Listing::create($request->validated());
@@ -45,7 +46,7 @@ class ListingController extends Controller
         }
     }
 
-    public function update(StoreListingRequest $request, Listing $listing)
+    public function update(StoreListingRequest $request, Listing $listing): RedirectResponse
     {
         try {
             $listing->update($request->validated());
@@ -57,7 +58,7 @@ class ListingController extends Controller
         }
     }
 
-    public function destroy(Listing $listing)
+    public function destroy(Listing $listing): RedirectResponse
     {
         try {
             $listing->delete();
