@@ -22,7 +22,9 @@
                         <div>
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <x-nav-link route="listings.index" :active="request()->route()->getName() === 'listings.index'">Listings</x-nav-link>
-                                <x-nav-link route="listings.create" :active="request()->route()->getName() === 'listings.create'">Create Listing</x-nav-link>
+                                @auth
+                                    <x-nav-link route="listings.create" :active="request()->route()->getName() === 'listings.create'">Create Listing</x-nav-link>
+                                @endauth
                             </div>
                         </div>
                     </div>
