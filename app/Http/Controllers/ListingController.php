@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreListingRequest;
+use App\Mail\ListingPosted;
 use App\Models\Listing;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Throwable;
 
@@ -43,9 +43,13 @@ class ListingController extends Controller
     public function store(StoreListingRequest $request): RedirectResponse
     {
         try {
-            Listing::create($request->validated() + [
+            $listing = Listing::create($request->validated() + [
                 'employer_id' => Auth::user()->employer->id,
             ]);
+
+            Mail::to(Auth::user()->email)->queue(
+                new ListingPosted($listing),
+            );
         } catch (Throwable) {
         } finally {
             return redirect(
